@@ -26,6 +26,7 @@ class ExampleController extends Controller
         $response->headers->set('X-Accel-Buffering', 'no');//Nginx: unbuffered responses suitable for Comet and HTTP streaming applications
         $response->setCallback(function () use ($i) {
 
+            // echo "event: message\n"; // for onmessage listener
             echo "event: ping\n";
             $curDate = date(DATE_ISO8601);
             echo 'data: {"time": "' . $curDate . '"}';
