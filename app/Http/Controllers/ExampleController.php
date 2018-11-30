@@ -32,6 +32,10 @@ class ExampleController extends Controller
             echo 'data: {"time": "' . $curDate . '"}';
             echo "\n\n";
 
+            echo "event: message\n";
+            $curDate = date(DATE_ISO8601);
+            echo 'data: {"message-time": "' . $curDate . '"}';
+            echo "\n\n";
             // while(true){
             //     if ($index != $this->eventsCounter){
             //         ServerSentEvents::sendEvent($this->event, $this->eventBody);
