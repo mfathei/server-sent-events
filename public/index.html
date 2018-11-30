@@ -1,12 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Server Sent Events</title>
 </head>
+
 <body>
     <h2>Server Sent Events Project</h2>
+    <ul id="list"></ul>
+    <script>
+        var evtSource = new EventSource('/api/v1/eventstream');
+        // all events
+        var eventList = document.getElementById('list');
+// onmessage not working
+        // evtSource.onmessage = function (e) {
+        //     console.log(e);
+        //     var newElement = document.createElement("li");
+
+        //     newElement.innerHTML = "message: " + e.data;
+        //     eventList.appendChild(newElement);
+        // }
+        evtSource.addEventListener('ping', function (e) {
+            var newElement = document.createElement("li");
+
+            newElement.innerHTML = "message: " + e.data;
+            eventList.appendChild(newElement);
+        }, false);
+    </script>
 </body>
+
 </html>
