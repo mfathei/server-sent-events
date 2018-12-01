@@ -18,4 +18,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => '/api/v1'], function() use ($router){
     $router->get('eventstream', 'ExampleController@eventStream');
+
+    $router->post('register', 'ExampleController@register');
+    $router->get('events', 'ExampleController@getEvents');
 });

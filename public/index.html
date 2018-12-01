@@ -9,27 +9,55 @@
 </head>
 
 <body>
-    <h2>Server Sent Events Project</h2>
-    <ul id="list"></ul>
-    <script>
-        var evtSource = new EventSource('/api/v1/eventstream');
-        // all events
-        var eventList = document.getElementById('list');
-        // onmessage working only with event name `message`
-        evtSource.onmessage = function (e) {
-            console.log(e);
-            var newElement = document.createElement("li");
+<br><br>
+<form>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+    <button onclick="register">Register</button>
+</form>
+<h2>Server Sent Events Project</h2>
+<ul id="list"></ul>
+<script>
+    var evtSource = new EventSource('/api/v1/eventstream');
+    // all events
+    var eventList = document.getElementById('list');
+    // onmessage working only with event name `message`
+    evtSource.onmessage = function (e) {
+        console.log(e);
+        var newElement = document.createElement("li");
 
-            newElement.innerHTML = "message: " + e.data;
-            eventList.appendChild(newElement);
-        }
-        evtSource.addEventListener('ping', function (e) {
-            var newElement = document.createElement("li");
+        newElement.innerHTML = "message: " + e.data;
+        eventList.appendChild(newElement);
+    };
 
-            newElement.innerHTML = "message: " + e.data;
-            eventList.appendChild(newElement);
-        }, false);
-    </script>
+    evtSource.addEventListener('ping', function (e) {
+        var newElement = document.createElement("li");
+
+        newElement.innerHTML = "ping: " + e.data;
+        eventList.appendChild(newElement);
+    }, false);
+
+    evtSource.addEventListener('register', function (e) {
+        var newElement = document.createElement("li");
+
+        newElement.innerHTML = "register: " + e.data;
+        eventList.appendChild(newElement);
+    }, false);
+
+    function register(e) {
+        e.preventDefault();
+        var name = document.getElementById('username').value;
+        console.log(name);
+        fetch('/api/v1/register', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+    }
+</script>
 </body>
 
 </html>
