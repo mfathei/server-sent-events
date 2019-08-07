@@ -22,11 +22,11 @@ class ExampleController extends Controller
         // $this->eventsArr = $eventsArr;
         $this->callback = function () {
 
-            // echo "event: message\n"; // for onmessage listener
-            // echo "event: ping\n";
-            // $curDate = date(DATE_ISO8601);
-            // echo 'data: {"time": "' . $curDate . '"}';
-            // echo "\n\n";
+            echo "event: message\n"; // for onmessage listener
+            echo "event: ping\n";
+            $curDate = date(DATE_ISO8601);
+            echo 'data: {"time": "' . $curDate . '"}';
+            echo "\n\n";
 
             while (($event = ServerSentEvents::popEvent()) != null) {
                 $m = json_encode($event->contents);

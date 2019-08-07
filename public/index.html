@@ -13,12 +13,13 @@
 <form>
     <label for="username">Username:</label>
     <input type="text" id="username" name="username">
-    <button onclick="register">Register</button>
+    <button type="button" onclick="register()">Register</button>
 </form>
 <h2>Server Sent Events Project</h2>
 <ul id="list"></ul>
 <script>
-    var evtSource = new EventSource('/api/v1/eventstream');
+    const api_url = 'http://127.0.0.1:8000';
+    var evtSource = new EventSource(api_url+'/api/v1/eventstream');
     // all events
     var eventList = document.getElementById('list');
     // onmessage working only with event name `message`
@@ -44,11 +45,12 @@
         eventList.appendChild(newElement);
     }, false);
 
-    function register(e) {
-        e.preventDefault();
+    function register() {
+        console.log('yiuyh7uigyu');
         var name = document.getElementById('username').value;
+        var data = {'name' : name};
         console.log(name);
-        fetch('/api/v1/register', {
+        fetch(api_url +'/api/v1/register', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -56,7 +58,7 @@
             },
             body: JSON.stringify(data)
         })
-    }
+    };
 </script>
 </body>
 
