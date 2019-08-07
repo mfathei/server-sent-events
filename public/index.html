@@ -14,6 +14,7 @@
     <label for="username">Username:</label>
     <input type="text" id="username" name="username">
     <button type="button" onclick="register()">Register</button>
+    <button type="button" onclick="download()">Download Async</button>
 </form>
 <h2>Server Sent Events Project</h2>
 <ul id="list"></ul>
@@ -45,12 +46,34 @@
         eventList.appendChild(newElement);
     }, false);
 
+    evtSource.addEventListener('download_end', function (e) {
+        var newElement = document.createElement("li");
+
+        newElement.innerHTML = "download_end: " + e.data;
+        eventList.appendChild(newElement);
+        evtSource.close();
+    }, false);
+
+
     function register() {
-        console.log('yiuyh7uigyu');
         var name = document.getElementById('username').value;
         var data = {'name' : name};
         console.log(name);
         fetch(api_url +'/api/v1/register', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+    };
+
+    function download() {
+        var name = document.getElementById('username').value;
+        var data = { 'name': name };
+        console.log(name);
+        fetch(api_url + '/api/v1/download', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

@@ -14,3 +14,7 @@ frontend `http://127.0.0.1:8000/` <br>
 or use php server without lite-server
 `php -S 0.0.0.0:8000 -t public` <br>
 then open `http://127.0.0.1:8000/` <br>
+
+<hr>
+now I use Redis as QUEUE driver <br>
+and you need to run this `php artisan queue:work`

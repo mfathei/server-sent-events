@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 class ServerSentEvents
 {
+    public const DOWNLOAD_START = 'download_start';
+    public const DOWNLOAD_END = 'download_end';
     private const FILENAME = 'events.json';
     private static $arr = [];
 

@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Jobs\DownloadJob;
 
 // use Illuminate\Container\Container;
 
 class ExampleController extends Controller
 {
+    protected $response;
     protected $events;
     private $callback;
     /**
@@ -22,7 +24,7 @@ class ExampleController extends Controller
         // $this->eventsArr = $eventsArr;
         $this->callback = function () {
 
-            echo "event: message\n"; // for onmessage listener
+            // echo "event: message\n"; // for onmessage listener
             echo "event: ping\n";
             $curDate = date(DATE_ISO8601);
             echo 'data: {"time": "' . $curDate . '"}';
@@ -47,17 +49,23 @@ class ExampleController extends Controller
             //     sleep(1);
             // }
         };
+
+        $this->setupResponse();
     }
 
     public function eventStream()
     {
-        $response = new \Symfony\Component\HttpFoundation\StreamedResponse();
-        $response->headers->set('Content-Type', 'text/event-stream');
-        $response->headers->set('Cache-Control', 'no-cache');
-        $response->headers->set('Connection', 'keep-alive');
-        $response->headers->set('X-Accel-Buffering', 'no');//Nginx: unbuffered responses suitable for Comet and HTTP streaming applications
-        $response->setCallback($this->callback);
-        return $response;
+        return $this->response;
+    }
+
+    protected function setupResponse()
+    {
+        $this->response = new \Symfony\Component\HttpFoundation\StreamedResponse();
+        $this->response->headers->set('Content-Type', 'text/event-stream');
+        $this->response->headers->set('Cache-Control', 'no-cache');
+        $this->response->headers->set('Connection', 'keep-alive');
+        $this->response->headers->set('X-Accel-Buffering', 'no'); //Nginx: unbuffered responses suitable for Comet and HTTP streaming applications
+        $this->response->setCallback($this->callback);
     }
 
     public function getEvents()
@@ -76,4 +84,12 @@ class ExampleController extends Controller
         return new JsonResponse(['status' => 'success'], 201);
     }
     //
+
+    public function startDownload(Request $request)
+    {
+        $name = $request->name;
+        ServerSentEvents::pushEvent(ServerSentEvents::DOWNLOAD_START, ['message' => 'User '. $name .' started download!']);
+        dispatch(new DownloadJob(30));
+        return new JsonResponse(['status' => 'success'], 201);
+    }
 }
